@@ -1,1 +1,29 @@
+#include <stdio.h>
+#include <string.h>
 
+#define MAX 10
+
+int main()
+{
+    char filename[MAX][20];
+    int n, i;
+
+    printf("Enter number of files: ");
+    scanf("%d", &n);
+
+    printf("Enter file names:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        scanf("%s", filename[i]);
+    }
+
+    printf("\nFiles in Single Level Directory:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        printf("%s\n", filename[i]);
+    }
+
+    return 0;
+}

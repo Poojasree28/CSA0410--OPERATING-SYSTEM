@@ -1,1 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
+struct message
+{
+    long message_type;
+    char message_text[100];
+};
+
+int main()
+{
+    key_t key;
+    int msgid;
+
+    struct message msg;
+
+    // Generate unique key
+    key = ftok("msgfile", 65);
+
+    // Create message queue
+    msgid = msgget(key, 0666 | IPC_CREAT);
+
+    if (msgid == -1)
+    {
+        printf("Message Queue Creation Failed\n");
+        exit(1);
+    }
+
+    if (fork() == 0)
+    {
+        // Child Process - Receiver
+
+        msgrcv(msgid, &msg, sizeof(msg.message_text), 1, 0);
+
+        printf("\nChild Process\n");
+        printf("Message Received: %s\n", msg.message_text);
+
+    }
+    else
+    {
+        // Parent Process - Sender
+
+        msg.message_type = 1;
+
+        strcpy(msg.message_text,
+               "Hello from Parent using Message Queue");
+
+        msgsnd(msgid, &msg, sizeof(msg.message_text), 0);
+
+        printf("Parent Process\n");
+        printf("Message Sent Successfully\n");
+
+        wait(NULL);
+
+        // Remove message queue
+        msgctl(msgid, IPC_RMID, NULL);
+    }
+
+    return 0;
+}

@@ -1,1 +1,41 @@
+#include <stdio.h>
 
+int main()
+{
+    int users, files[10];
+    int i, j;
+    char user[10][20];
+    char filename[10][10][20];
+
+    printf("Enter number of users: ");
+    scanf("%d", &users);
+
+    for(i = 0; i < users; i++)
+    {
+        printf("\nEnter user name: ");
+        scanf("%s", user[i]);
+
+        printf("Enter number of files: ");
+        scanf("%d", &files[i]);
+
+        for(j = 0; j < files[i]; j++)
+        {
+            printf("Enter file %d: ", j + 1);
+            scanf("%s", filename[i][j]);
+        }
+    }
+
+    printf("\nTwo Level Directory Structure\n");
+
+    for(i = 0; i < users; i++)
+    {
+        printf("\nUser: %s\n", user[i]);
+
+        for(j = 0; j < files[i]; j++)
+        {
+            printf("  %s\n", filename[i][j]);
+        }
+    }
+
+    return 0;
+}
